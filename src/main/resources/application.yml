@@ -7,6 +7,11 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+    registry-fetch-interval-seconds: 10
+    disable-delta: true
+  instance:
+    lease-renewal-interval-in-seconds: 3
+    lease-expiration-duration-in-seconds: 10
 
 spring:
   application:
