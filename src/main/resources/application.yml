@@ -16,6 +16,13 @@ eureka:
 spring:
   application:
     name: apigateway-service
+  profiles:
+    active: local
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     gateway:
       routes:
@@ -32,6 +39,14 @@ spring:
           predicates:
             - Path=/user-service/users
             - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
@@ -108,11 +123,18 @@ spring:
             baseMessage: Spring Cloud Gateway GlobalFilter
             preLogger: true
             postLogger: true
-    config:
-      uri: localhost:8888
-      name: ecommerce
+  config:
+    import:
+      - classpath:/bootstrap.yml
 #jwt:
 #  secret:
 #    key: Yq3t6w9z$C&F)J@NcRfUjWnZr4u7x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeT
 #  refresh-token-validity-in-seconds: 1800 # 30 분
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,beans,httptrace,busrefresh
 #  access-token-validity-in-seconds: 300 # 5 분
+encrypt:
+  key: secret-test
