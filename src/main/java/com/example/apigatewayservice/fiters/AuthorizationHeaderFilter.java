@@ -69,17 +69,17 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     private boolean isJwtValid(String jwt) {
         boolean returnValue = true;
-//        secretKey = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
-//        String subject = null;
-//        try{
-//            subject = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody().getSubject();
-//        }catch (Exception e){
-//            returnValue = false;
-//        }
-//
-//        if(subject == null || subject.isEmpty()){
-//            returnValue = false;
-//        }
+        secretKey = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
+        String subject = null;
+        try{
+            subject = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwt).getBody().getSubject();
+        }catch (Exception e){
+            returnValue = false;
+        }
+
+        if(subject == null || subject.isEmpty()){
+            returnValue = false;
+        }
 
         return returnValue;
     }
